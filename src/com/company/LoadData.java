@@ -159,7 +159,7 @@ public class LoadData {
             for (int i = 0; i < m_size; i++) {
                mask=pow-1-(int)Math.pow(2,i); //Maska do okreslania podzbioru POPRAWIC ################################################
                 subSetting = setup & mask;
-               myTextArea.appendText("\nUstawiam na: "+setup+"    Maska: "+ mask+"    subUstawienie: "+ subSetting+ "    Miasto= "+(i+1));
+              // myTextArea.appendText("\nUstawiam na: "+setup+"    Maska: "+ mask+"    subUstawienie: "+ subSetting+ "    Miasto= "+(i+1));
                 if (subSetting != setup) {
 
                     //myTextArea.appendText( "\nWartość do policzenia: "+"miasto: od ["+(startingPoint+1)+"] do ["+(i+1)+"] = "+cities[startingPoint][i] + " + reszta drogi ("+i+","+subSetting+")\n");
