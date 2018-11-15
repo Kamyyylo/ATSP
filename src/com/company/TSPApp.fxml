@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="TSPPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="735.0" prefWidth="1229.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.LoadData">
+   <children>
+      <Label layoutX="14.0" prefHeight="112.0" prefWidth="1113.0" text="Asymetyrczny Problem Komiwojazera" textFill="RED">
+         <font>
+            <Font name="AR DARLING" size="68.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="myTextArea" editable="false" layoutX="575.0" layoutY="97.0" prefHeight="507.0" prefWidth="648.0" />
+      <Button layoutX="15.0" layoutY="157.0" mnemonicParsing="false" onAction="#printCities" prefHeight="50.0" prefWidth="535.0" text="Wyświetl Macierz">
+         <font>
+            <Font name="AR CENA" size="22.0" />
+         </font>
+      </Button>
+      <Button layoutX="15.0" layoutY="280.0" mnemonicParsing="false" onAction="#printResult" prefHeight="50.0" prefWidth="260.0" text="Wyświetl wynik">
+         <font>
+            <Font name="AR CENA" size="22.0" />
+         </font>
+      </Button>
+      <Button layoutX="15.0" layoutY="222.0" mnemonicParsing="false" onAction="#initDynamicProgramming" prefHeight="50.0" prefWidth="260.0" text="Programowanie Dynamiczne">
+         <font>
+            <Font name="AR CENA" size="22.0" />
+         </font>
+      </Button>
+      <Button layoutX="290.0" layoutY="224.0" mnemonicParsing="false" onAction="#initBruteForce" prefHeight="50.0" prefWidth="260.0" text="Metoda Brute-Force">
+         <font>
+            <Font name="AR CENA" size="22.0" />
+         </font>
+      </Button>
+      <Button layoutX="290.0" layoutY="282.0" mnemonicParsing="false" onAction="#bruteForcePrintResult" prefHeight="50.0" prefWidth="260.0" text="Wyświetl Wynik">
+         <font>
+            <Font name="AR CENA" size="22.0" />
+         </font>
+      </Button>
+      <Separator layoutX="281.0" layoutY="221.0" orientation="VERTICAL" prefHeight="250.0" prefWidth="7.0" />
+      <Button layoutX="15.0" layoutY="397.0" mnemonicParsing="false" onAction="#initDynamicProgrammingFor100Instances" prefHeight="50.0" prefWidth="260.0" text="PD dla 100 instancji">
+         <font>
+            <Font name="AR CENA" size="22.0" />
+         </font>
+      </Button>
+      <TextField fx:id="dp_instanceTextField" layoutX="107.0" layoutY="354.0" prefHeight="38.0" prefWidth="101.0" />
+      <Label layoutX="15.0" layoutY="349.0" text="Podaj N:">
+         <font>
+            <Font name="AR CENA" size="30.0" />
+         </font>
+      </Label>
+      <Label layoutX="289.0" layoutY="357.0" text="Podaj N:">
+         <font>
+            <Font name="AR CENA" size="30.0" />
+         </font>
+      </Label>
+      <TextField fx:id="bf_instanceTextField" layoutX="379.0" layoutY="365.0" />
+      <Button layoutX="289.0" layoutY="397.0" mnemonicParsing="false" onAction="#initBruteForceFor100Instances" prefHeight="50.0" prefWidth="260.0" text="BF dla 100 instancji">
+         <font>
+            <Font name="AR CENA" size="22.0" />
+         </font>
+      </Button>
+      <Button fx:id="fileChooseTextField" layoutX="15.0" layoutY="97.0" mnemonicParsing="false" onAction="#Load" prefHeight="50.0" prefWidth="535.0" text="Wybierz Plik">
+         <font>
+            <Font name="AR CENA" size="22.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>
