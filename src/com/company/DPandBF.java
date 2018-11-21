@@ -37,25 +37,27 @@ public class LoadData {
     @FXML
     private Button fileChooseTextField;
 
-    File file;
-    int m_size;
-    int subProblem[][],backTrack[][];
-    int[][] cities;
-    int pow;
-    public int cost=-1;
-    public ArrayList<Integer> trip = new ArrayList<>();
+    File file;                                                      // File to read
+    int m_size;                                                     //size of matrix
+    int subProblem[][],backTrack[][];                               //subproblem and backtrack tables
+    int[][] cities;                                                 //tables with cities cost
+    int pow;                                                        //help attribute
+    public int cost=-1;                                             //default cost
+    public ArrayList<Integer> trip = new ArrayList<>();             //list with the shortest road
+    public ArrayList<String> steps = new ArrayList<>();             // list with steps of DP algorithm
+
     public void Load() throws FileNotFoundException {
         myTextArea.clear();
         trip.clear();
         String workingDir = System.getProperty("user.dir");
-        workingDir += "\\" + "\\Files";
+        workingDir += "\\" + "\\Files";                             //Place where files to load exist
         JFileChooser jFileChooser = new JFileChooser(workingDir);
        if( jFileChooser.showOpenDialog(null)==JFileChooser.APPROVE_OPTION) {
             file = new File(jFileChooser.getSelectedFile().toString());
             Scanner in = new Scanner(file);
-        m_size=in.nextInt();
+        m_size=in.nextInt();                                        //Size is first int in file
         cities = new int[m_size][m_size];
-//Wczytanie danych do macierzy
+                                                                    //loading data to matrix:
         for(int i=0;i<m_size;i++){
             for(int j=0;j<m_size;j++){
                 cities[i][j]=in.nextInt();
@@ -66,9 +68,9 @@ public class LoadData {
         }
        in.close();
        }
-        //Tworzę tablice podproblemow i tablicę do "nawracania"
-        //pow: liczba 2 podniesiona do potegi rozmiaru macierzy
-        //Jeżeli zbiór ma n elementów, to ilość wszystkich jego podzbiorów(stanów) wynosi n*2^n
+        //Create subproblem and backtrack table
+        //pow: number 2 up to power of N
+        //If matrix has N elements, the number of his supbrolem is n*2^n
        pow=(int)Math.pow(2,m_size);
         subProblem = new int[m_size][pow];
         backTrack = new int[m_size][pow];
@@ -80,6 +82,14 @@ public class LoadData {
         }
 
     }
+
+    public int getM_size() {
+        return m_size;
+    }
+
+    public void setM_size(int m_size) {
+        this.m_size = m_size;
+    }
     public void initDynamicProgrammingFor100Instances(){
         Random rand = new Random();
         long DPtime=0;
@@ -89,63 +99,40 @@ public class LoadData {
             cities = new int[m_size][m_size];
             for(int i=0;i<m_size;i++){
                 for(int j=0;j<m_size;j++){
-                    cities[i][j]=rand.nextInt(50)+1;
+                    cities[i][j]=rand.nextInt(50)+1;            //random from 0 to 50
                     if(i==j){
                         cities[i][j]=-1;
-                    } //System.out.print(cities[i][j]+" ");
+                    }
                 }
-                //System.out.println("\n");
             }
-           // System.out.println("#####################\n");
             pow=(int)Math.pow(2,m_size);
             subProblem = new int[m_size][pow];
             backTrack = new int[m_size][pow];
 
             for(int i = 0;i<m_size;i++){
                 for (int j = 0;j<pow;j++){
-                    subProblem[i][j]= -1;
+                    subProblem[i][j]= -1;                               //filing tables with -1
                     backTrack[i][j]= -1;
                 }
             }
-//            System.out.println("wypisuje");
-//            for(int i=0 ;i<m_size;i++){
-//                for(int j=0;j<pow;j++){
-//                   System.out.print(subProblem[i][j]+"  ");
-//                }
-//                System.out.println();
-//            }
-
             for (int i=0;i<m_size;i++){
                 subProblem[i][0]=cities[i][0];
             }
             long startTimeDP = System.nanoTime();
-
             cost = DynamicProgramming(0,pow-2);
-
             long stopTimeDP = System.nanoTime();
             DPtime=(stopTimeDP-startTimeDP);
-            //System.out.println(String.valueOf(DPtime)+"\n");
             DPavgTime+=DPtime;
         }
-        myTextArea.appendText("\nCzas średni dla macierzy N metodą Programowania Dynamicznego= "+m_size+": "+DPavgTime/100+" nanosekund\n");
+        myTextArea.appendText("\nAverage Time for matrix= "+m_size+" using dynamic programming is : "+DPavgTime/100+" nanoseconds\n");
     }
     public void initDynamicProgramming(){
-        for (int i=0;i<m_size;i++){
-            subProblem[i][0]=cities[i][0];
+        for (int i=0;i<m_size;i++) {
+            subProblem[i][0] = cities[i][0];
         }
-        myTextArea.appendText("\n");
-        myTextArea.appendText("Tablica podproblemów: \n");
-        for (int i = 0; i < m_size; i++) {
-            for (int j = 0; j < pow; j++) {
-                myTextArea.appendText(subProblem[i][j]+"   ");
-            } myTextArea.appendText("\n");
-        }
-        myTextArea.appendText("\n");
-        trip.add(1); //Daje poczatkowe miasto
+        trip.add(1);
         cost = DynamicProgramming(0,pow-2);
-
         getTrip(0,pow-2);
-
         trip.add(1);
     }
     public int DynamicProgramming(int startingPoint,int setup){
@@ -157,39 +144,38 @@ public class LoadData {
         else {
 
             for (int i = 0; i < m_size; i++) {
-               mask=pow-1-(int)Math.pow(2,i); //Maska do okreslania podzbioru POPRAWIC ################################################
-                subSetting = setup & mask;
-              // myTextArea.appendText("\nUstawiam na: "+setup+"    Maska: "+ mask+"    subUstawienie: "+ subSetting+ "    Miasto= "+(i+1));
+               mask=pow-1-(int)Math.pow(2,i);                           //setting mask
+                subSetting = setup & mask;                              //subsetting to recurency
+              steps.add("\nSetup: "+setup+"    Mask: "+ mask+"    subSetting: "+ subSetting+ "    City= "+(i+1));
                 if (subSetting != setup) {
 
-                    //myTextArea.appendText( "\nWartość do policzenia: "+"miasto: od ["+(startingPoint+1)+"] do ["+(i+1)+"] = "+cities[startingPoint][i] + " + reszta drogi ("+i+","+subSetting+")\n");
+                    steps.add( "\nValue to count: "+"city: from ["+(startingPoint+1)+"] to ["+(i+1)+"] = "+cities[startingPoint][i] + " + rest of the road ("+i+","+subSetting+")\n");
                     theValue = cities[startingPoint][i] + DynamicProgramming(i, subSetting);
-                   // myTextArea.appendText("Wartość policzona: miasto: od ["+(startingPoint+1)+"] do ["+(i+1)+"] = "+cities[startingPoint][i]+" + reszta drogi ("+i+","+subSetting+") = " +DynamicProgramming(i,subSetting)+ " = "+theValue+"\n");
+                    steps.add("\nValue counted: city: from ["+(startingPoint+1)+"] to ["+(i+1)+"] = "+cities[startingPoint][i]+" + rest of the road ("+i+","+subSetting+") = " +DynamicProgramming(i,subSetting)+ " = "+theValue+"\n");
 
                     if (result == -1 || theValue < result) {
                         result = theValue;
                         backTrack[startingPoint][setup] = i;
-                       // myTextArea.appendText("Tablica powrotów ["+startingPoint+"]["+setup+"]= "+ backTrack[startingPoint][setup]+"\n");
+                        steps.add("Backtracking["+startingPoint+"]["+setup+"]= "+ backTrack[startingPoint][setup]+"\n");
                     }
-                }else { //myTextArea.appendText(("--> omijam"));
+                }else { steps.add(("--> Skip this city"));
                 }
             }
-
             subProblem[startingPoint][setup] = result;
-            //myTextArea.appendText("\nPodproblem ["+startingPoint+"]["+setup+"]= "+subProblem[startingPoint][setup]+"\n");
-           // myTextArea.appendText("\n");
-            //myTextArea.appendText("Tablica podproblemów: \n");
-           // for (int i = 0; i < m_size; i++) {
-               // for (int j = 0; j < pow; j++) {
-                    //myTextArea.appendText(subProblem[i][j]+"   ");
-               // } //myTextArea.appendText("\n");
-            //}
-            //myTextArea.appendText("\n");
-           //System.out.println("Wynik = "+result+"\n");
+            steps.add("\nsubproblem ["+startingPoint+"]["+setup+"]= "+subProblem[startingPoint][setup]+"\n");
+            steps.add("SubProblem table: \n");
+            for (int i = 0; i < m_size; i++) {
+                for (int j = 0; j < pow; j++) {
+                    steps.add(subProblem[i][j]+"   ");
+                } steps.add("\n");
+            }
+            steps.add("\n");
+            steps.add("Result = "+result+"\n");
             return result;
         }
-
-
+    }
+    public void getSteps(){
+        myTextArea.appendText(steps+"");
     }
     public void getTrip(int startingPoint, int setup){
         if(backTrack[startingPoint][setup]==-1){
@@ -203,7 +189,7 @@ public class LoadData {
     }
     public void printSubProblem(){
         myTextArea.appendText("\n");
-        myTextArea.appendText("Tablica podproblemów: \n");
+        myTextArea.appendText("SubProblem table: \n");
         for(int i=0 ;i<m_size;i++){
             for(int j=0;j<pow;j++){
                 myTextArea.appendText(subProblem[i][j]+"  ");
@@ -214,7 +200,7 @@ public class LoadData {
     }
     public void printBackTracking(){
         myTextArea.appendText("\n");
-        myTextArea.appendText("Tablica do backtrackingu: \n");
+        myTextArea.appendText("BackTrack table: \n");
         for(int i=0 ;i<m_size;i++){
             for(int j=0;j<pow;j++){
                 myTextArea.appendText(backTrack[i][j]+" ");
@@ -226,7 +212,7 @@ public class LoadData {
 
     public void printResult(){
         myTextArea.appendText("\n");
-        myTextArea.appendText("Najkrotsza możliwa droga: ");
+        myTextArea.appendText("Shortest possible way: ");
         for(int i=0;i<trip.size();i++){
             if(i+1!=trip.size())
                 myTextArea.appendText(trip.get(i)+"-->");
@@ -234,13 +220,13 @@ public class LoadData {
             else
                 myTextArea.appendText(trip.get(i)+"");
         }
-        myTextArea.appendText("\nKoszt drogi: "+cost+"\n");
+        myTextArea.appendText("\nTrip cost: "+cost+"\n");
         myTextArea.appendText("\n");
     }
 
     public void  printCities(){
         myTextArea.appendText("\n");
-        myTextArea.appendText("Macierz "+m_size+"x"+m_size+"\n");
+        myTextArea.appendText("Matrix "+m_size+"x"+m_size+"\n");
         for(int i=0;i<m_size;i++){
             for (int j=0;j<m_size;j++){
                 myTextArea.appendText(cities[i][j]+"\t");
@@ -249,41 +235,40 @@ public class LoadData {
         }
         myTextArea.appendText("\n");
     }
-
+    //Brute Force Method
     int shortestDistance;
     String shortestRoute;
     int g=0;
+    public void initBruteForce(){
+        populate("",m_size);
 
-public void initBruteForce(){
-    populate("",m_size);
 
-
-}
-public void initBruteForceFor100Instances(){
-    long BFTime=0;
-    long BFavgTime=0;
-    Random rand1 = new Random();
-    m_size=Integer.parseInt(bf_instanceTextField.getText());
-    cities = new int[m_size][m_size];
-    for(int g=0;g<100;g++) {
-        for (int i = 0; i < m_size; i++) {
-            for (int j = 0; j < m_size; j++) {
-                cities[i][j] = rand1.nextInt(50) + 1;
-                if (i == j) {
-                    cities[i][j] = -1;
-                } //System.out.print(cities[i][j]+" ");
-            }//System.out.print("\n");
-        }
-        long startTimeBF = System.nanoTime();
-        populate("", m_size);
-        long stopTimeBF = System.nanoTime();
-        BFTime = stopTimeBF - startTimeBF;
-        //myTextArea.appendText("["+g+"]= "+String.valueOf(BFTime)+"\n");
-        BFavgTime += BFTime;
-    }myTextArea.appendText("\nCzas średni dla macierzy N metodą Brute-Force= "+m_size+": "+BFavgTime/100+" nanosekund\n");
-}
+    }
+    public void initBruteForceFor100Instances(){
+        long BFTime=0;
+        long BFavgTime=0;
+        Random rand1 = new Random();
+        m_size=Integer.parseInt(bf_instanceTextField.getText());
+        cities = new int[m_size][m_size];
+        for(int g=0;g<100;g++) {
+            for (int i = 0; i < m_size; i++) {
+                for (int j = 0; j < m_size; j++) {
+                    cities[i][j] = rand1.nextInt(50) + 1;
+                    if (i == j) {
+                        cities[i][j] = -1;
+                    } //System.out.print(cities[i][j]+" ");
+                }//System.out.print("\n");
+            }
+            long startTimeBF = System.nanoTime();
+            populate("", m_size);
+            long stopTimeBF = System.nanoTime();
+            BFTime = stopTimeBF - startTimeBF;
+            //myTextArea.appendText("["+g+"]= "+String.valueOf(BFTime)+"\n");
+            BFavgTime += BFTime;
+        }myTextArea.appendText("\nCzas średni dla macierzy N metodą Brute-Force= "+m_size+": "+BFavgTime/100+" nanosekund\n");
+    }
     int gn=0;
-int cn=0;
+    int cn=0;
     protected void populate(String sign, int k)
     {
         //System.out.print("K["+g+"] "+k+"\n");
@@ -318,7 +303,7 @@ int cn=0;
             if(!sign.contains(cs))
             {
                 cr = ""+cs;
-               // System.out.print("cr: "+cr+"\n");
+                // System.out.print("cr: "+cr+"\n");
             }
             else
             {
@@ -341,7 +326,7 @@ int cn=0;
         for(int i = 0; i<route.length-1; i++)
         { //System.out.print("Route["+i+"]: "+route[i]+"\n");
             route[i] = route[i+1];
-          // System.out.print("Route["+(i+1)+"]: "+route[i]+"\n");
+            // System.out.print("Route["+(i+1)+"]: "+route[i]+"\n");
         }
         route[route.length-1] = route[0];
         for(int i=0;i<route.length;i++){
@@ -368,7 +353,7 @@ int cn=0;
                 s += shortestRoute.charAt(i);
         }
         myTextArea.appendText("\n");
-       myTextArea.appendText("Koszt drogi: " + shortestDistance + "\n" + "Najkrotsza możliwa droga: " + s+"-1");
+        myTextArea.appendText("Koszt drogi: " + shortestDistance + "\n" + "Najkrotsza możliwa droga: " + s+"-1");
     }
 
 }
