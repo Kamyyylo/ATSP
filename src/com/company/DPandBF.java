@@ -245,6 +245,7 @@ public class DPandBF {
     public void initBruteForce(){
         populate("",m_size);
     }
+
     public void initBruteForceFor100Instances(){
         long BFTime=0;
         long BFavgTime=0;
