@@ -124,7 +124,7 @@ public class DPandBF {
             DPtime=(stopTimeDP-startTimeDP);
             DPavgTime+=DPtime;
         }
-        myTextArea.appendText("\nAverage Time for matrix= "+m_size+" using dynamic programming is : "+DPavgTime/100+" nanoseconds\n");
+        myTextArea.appendText("\nAverage Time for matrix = "+m_size+" for 100 instances using dynamic programming is : "+DPavgTime/100+" nanoseconds\n");
     }
     public void initDynamicProgramming(){
         for (int i=0;i<m_size;i++) {
@@ -245,7 +245,6 @@ public class DPandBF {
     public void initBruteForce(){
         populate("",m_size);
 
-
     }
     public void initBruteForceFor100Instances(){
         long BFTime=0;
@@ -268,7 +267,7 @@ public class DPandBF {
             BFTime = stopTimeBF - startTimeBF;
            stepsBF.add("\n["+g+"]= "+String.valueOf(BFTime)+"\n");
             BFavgTime += BFTime;
-        }myTextArea.appendText("\nAverage Time for matrix= "+m_size+" using brute force is : "+BFavgTime/100+" nanoseconds\n");
+        }myTextArea.appendText("\nAverage Time for matrix = "+m_size+" for 100 instances using brute force is : "+BFavgTime/100+" nanoseconds\n");
     }
 
     protected void populate(String sign, int k)

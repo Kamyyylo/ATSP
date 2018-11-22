@@ -8,14 +8,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="TSPPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="735.0" prefWidth="1229.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.DPandBF">
+<Pane fx:id="TSPPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="735.0" prefWidth="1246.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.DPandBF">
    <children>
       <Label layoutX="76.0" layoutY="-15.0" prefHeight="112.0" prefWidth="1113.0" text="Asymmetric Salesman Problem" textFill="RED">
          <font>
             <Font name="Times New Roman" size="85.0" />
          </font>
       </Label>
-      <TextArea fx:id="myTextArea" editable="false" layoutX="575.0" layoutY="97.0" prefHeight="507.0" prefWidth="648.0" />
+      <TextArea fx:id="myTextArea" editable="false" layoutX="575.0" layoutY="97.0" prefHeight="507.0" prefWidth="659.0" />
       <Button layoutX="15.0" layoutY="157.0" mnemonicParsing="false" onAction="#printCities" prefHeight="50.0" prefWidth="535.0" text="Show Matrix">
          <font>
             <Font name="Times New Roman" size="18.0" />
