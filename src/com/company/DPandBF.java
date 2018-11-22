@@ -273,6 +273,7 @@ public class DPandBF {
 
     protected void populate(String sign, int k)
     {
+
         stepsBF.add("\nK["+ this.k +"] "+k+"\n");
         this.k++;
         counter++;
