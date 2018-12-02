@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
 import javax.swing.*;
 
 public class DPandBF {
@@ -36,6 +40,15 @@ public class DPandBF {
     private TextField bf_instanceTextField;
     @FXML
     private Button fileChooseTextField;
+    @FXML
+    private Button closeButton;
+    @FXML
+    private void closeButtonAction(){
+        // get a handle to the stage
+        Stage stage = (Stage) closeButton.getScene().getWindow();
+        // do what you have to do
+        stage.close();
+    }
 
     File file;                                                      // File to read
     int m_size;                                                     //size of matrix
@@ -361,5 +374,10 @@ public class DPandBF {
     public void getStepsBF()
     {
         myTextArea.appendText(stepsBF+"");
+    }
+    public void initalizeTabuSearchPane() throws IOException{
+        Pane tabuSearchPane = FXMLLoader.load(getClass().getResource("TabuSearchPane.fxml"));
+        TSPPane.getChildren().setAll(tabuSearchPane);
+
     }
 }

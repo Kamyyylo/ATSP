@@ -5,104 +5,187 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="TSPPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="735.0" prefWidth="1246.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.DPandBF">
+<Pane fx:id="TSPPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.DPandBF">
    <children>
-      <Label layoutX="76.0" layoutY="-15.0" prefHeight="112.0" prefWidth="1113.0" text="Asymmetric Salesman Problem" textFill="RED">
+      <TextArea fx:id="myTextArea" editable="false" layoutX="575.0" layoutY="97.0" prefHeight="507.0" prefWidth="659.0">
+         <effect>
+            <InnerShadow />
+         </effect></TextArea>
+      <Label layoutX="76.0" layoutY="-10.0" prefHeight="112.0" prefWidth="1120.0" text="Asymmetric Salesman Problem" textFill="#2367dd">
          <font>
             <Font name="Times New Roman" size="85.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Label>
-      <TextArea fx:id="myTextArea" editable="false" layoutX="575.0" layoutY="97.0" prefHeight="507.0" prefWidth="659.0" />
       <Button layoutX="15.0" layoutY="157.0" mnemonicParsing="false" onAction="#printCities" prefHeight="50.0" prefWidth="535.0" text="Show Matrix">
          <font>
             <Font name="Times New Roman" size="18.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Button>
       <Button layoutX="15.0" layoutY="280.0" mnemonicParsing="false" onAction="#printResult" prefHeight="50.0" prefWidth="260.0" text="Show Result">
          <font>
             <Font name="Times New Roman" size="18.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Button>
       <Button layoutX="15.0" layoutY="222.0" mnemonicParsing="false" onAction="#initDynamicProgramming" prefHeight="50.0" prefWidth="260.0" text="Dynamic Programming">
          <font>
             <Font name="Times New Roman" size="18.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Button>
       <Button layoutX="290.0" layoutY="224.0" mnemonicParsing="false" onAction="#initBruteForce" prefHeight="50.0" prefWidth="260.0" text="Brute-Force Method">
          <font>
             <Font name="Times New Roman" size="18.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Button>
       <Button layoutX="290.0" layoutY="282.0" mnemonicParsing="false" onAction="#bruteForcePrintResult" prefHeight="50.0" prefWidth="260.0" text="Show Result">
          <font>
             <Font name="Times New Roman" size="18.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Button>
       <Separator layoutX="281.0" layoutY="221.0" orientation="VERTICAL" prefHeight="438.0" prefWidth="7.0" />
       <Button layoutX="19.0" layoutY="600.0" mnemonicParsing="false" onAction="#initDynamicProgrammingFor100Instances" prefHeight="50.0" prefWidth="260.0" text="PD for 100 instance">
          <font>
             <Font name="Times New Roman" size="18.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Button>
-      <TextField fx:id="dp_instanceTextField" layoutX="158.0" layoutY="558.0" prefHeight="38.0" prefWidth="101.0" />
+      <TextField fx:id="dp_instanceTextField" layoutX="158.0" layoutY="558.0" prefHeight="38.0" prefWidth="101.0">
+         <effect>
+            <InnerShadow />
+         </effect></TextField>
       <Label layoutX="28.0" layoutY="562.0" text="Matrix size:">
          <font>
             <Font name="Times New Roman" size="26.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Label>
       <Label layoutX="290.0" layoutY="561.0" text="Matrix size:">
          <font>
             <Font name="Times New Roman" size="26.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Label>
-      <TextField fx:id="bf_instanceTextField" layoutX="420.0" layoutY="557.0" prefHeight="38.0" prefWidth="101.0" />
+      <TextField fx:id="bf_instanceTextField" layoutX="420.0" layoutY="557.0" prefHeight="38.0" prefWidth="101.0">
+         <effect>
+            <InnerShadow />
+         </effect></TextField>
       <Button layoutX="290.0" layoutY="601.0" mnemonicParsing="false" onAction="#initBruteForceFor100Instances" prefHeight="50.0" prefWidth="260.0" text="BF for 100 instance">
          <font>
             <Font name="Times New Roman" size="18.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Button>
       <Button fx:id="fileChooseTextField" layoutX="15.0" layoutY="97.0" mnemonicParsing="false" onAction="#Load" prefHeight="50.0" prefWidth="535.0" text="Choose File">
          <font>
             <Font name="Times New Roman" size="18.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Button>
       <Button layoutX="19.0" layoutY="361.0" mnemonicParsing="false" onAction="#printSubProblem" prefHeight="50.0" prefWidth="260.0" text="Show SubProblem Table">
          <font>
             <Font name="Times New Roman" size="18.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Button>
       <Button layoutX="19.0" layoutY="422.0" mnemonicParsing="false" onAction="#printBackTracking" prefHeight="50.0" prefWidth="260.0" text="Show BackTrack Table">
          <font>
             <Font name="Times New Roman" size="18.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Button>
       <Label layoutX="15.0" layoutY="338.0" text="Use this three buttons below only for small matrix">
          <font>
             <Font name="Times New Roman" size="13.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Label>
       <Label layoutX="17.0" layoutY="704.0" text="For The best improvement and the fastest results just comment lines with adding algorithm steps to list :D It's only to help you how to understand it! :D">
          <font>
             <Font name="Times New Roman" size="12.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Label>
       <Button layoutX="19.0" layoutY="483.0" mnemonicParsing="false" onAction="#getStepsDP" prefHeight="50.0" prefWidth="260.0" text="Steps of the Algorithm">
          <font>
             <Font name="Times New Roman" size="18.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Button>
       <Button layoutX="290.0" layoutY="361.0" mnemonicParsing="false" onAction="#getStepsBF" prefHeight="50.0" prefWidth="260.0" text="Steps od the Algorithm">
          <font>
             <Font name="Times New Roman" size="18.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Button>
       <Label layoutX="289.0" layoutY="338.0" text="Use this one button below only for very small matrix">
          <font>
             <Font name="Times New Roman" size="13.0" />
          </font>
+         <effect>
+            <InnerShadow />
+         </effect>
       </Label>
+      <Button layoutX="575.0" layoutY="609.0" mnemonicParsing="false" onAction="#initalizeTabuSearchPane" prefHeight="50.0" prefWidth="260.0" text="Tabu Search">
+         <font>
+            <Font name="Times New Roman" size="18.0" />
+         </font>
+         <effect>
+            <InnerShadow />
+         </effect>
+      </Button>
+      <Button fx:id="closeButton" layoutX="1215.0" layoutY="-3.0" mnemonicParsing="false" onAction="#closeButtonAction" prefHeight="15.0" prefWidth="39.0" text="X">
+         <effect>
+            <InnerShadow />
+         </effect>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
    </children>
+   <effect>
+      <InnerShadow />
+   </effect>
 </Pane>
