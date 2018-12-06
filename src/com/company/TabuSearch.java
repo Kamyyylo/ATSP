@@ -36,9 +36,7 @@ public class TabuSearch {
     private Button closeButton;
     @FXML
     private void closeButtonAction(){
-        // get a handle to the stage
         Stage stage = (Stage) closeButton.getScene().getWindow();
-        // do what you have to do
         stage.close();
     }
         public ArrayList<String> matrixToShow =new ArrayList<>();           //Showing matrix
@@ -119,15 +117,10 @@ public class TabuSearch {
         public int pathCostList(ArrayList<Integer> Path){
             cost =0;
             for(int i=0;i<Path.size()-1;i++){
-               // System.out.println("Wartosc dla miasta["+Path.get(i)+"]["+Path.get(i+1)+"]="+cities[Path.get(i)][Path.get(i+1)]);
-                //System.out.print("koszt: "+cost );
                 cost=cost+cities[Path.get(i)][Path.get(i+1)];
-               // System.out.println(", Droga do miasta: "+cities[Path.get(i)][Path.get(i+1)]+" = "+cost);
-
             }
 
             cost=cost+cities[Path.get(Path.size()-1)][Path.get(0)];
-            //System.out.println("Koszt końcowy: "+ cost);
             return cost;
         }
 
@@ -145,7 +138,7 @@ public class TabuSearch {
             System.out.print(Path);
             time = m_size;                                                  //Time for cities staying in tabuList
 
-            maxCritical = m_size * 2;//dywersyfikacji
+            maxCritical = m_size * 2;
             System.out.println("\nMaxCritical: " + maxCritical);
 
             Solution();
@@ -169,7 +162,6 @@ public class TabuSearch {
             int bestCost=999999;
             for(int j=1;j<m_size;j++){                                      //First city randomly taken is start city that's why I start from one
                 for(int k=2;k<m_size;k++){                                  //Second city in queue
-                    //System.out.println("\n#####################################################iteracja petli: "+ k);// next city to swap
                     if(j!=k){
                         temporaryNewSolution= new ArrayList<>();                          //Make new list with solution
                         for(int m=0;m<Path.size();m++){
@@ -331,9 +323,7 @@ public class TabuSearch {
         for(int i=0;i<m_size;i++){
             for(int j=0;j<m_size;j++){
                 if(tabuList[i][j]>0){
-                    //System.out.print("tabuList: "+tabuList[i][j]);
                     tabuList[i][j]--;
-                    // System.out.print("tabuList--: "+tabuList[i][j]);
                 }
             }
         }
