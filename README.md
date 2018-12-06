@@ -3,8 +3,8 @@
 Whole code is in 5 Java classes:<br />
 *-DPandBF.java*<br />
 *-Main*<br />
-*-DPandBFPane.fxml*<br /><br />
-*-TabuSearch.java*<br /><br />
+*-DPandBFPane.fxml*<br />
+*-TabuSearch.java*<br />
 *-TabuSearchPane.fxml*<br /><br />
 Data input is taken from files<br />
 **Examplary file (First number is the size of the matrix):**<br /><br />
@@ -17,7 +17,7 @@ Data input is taken from files<br />
 50 54 60 52 38  0<br /><br />
 To solve ATSP i used **Dynamic Programming**, **Brute-Force method** and **TabuSeach(To find closest value for many cities)**
 
-**TabuSearch** has 3 definition of neighborhood and diversification(criticalEvent).
+**TabuSearch** has 3 definition of neighborhood and a diversification(criticalEvent).
 
 
 Program has userfriendly interface to test and learn this two algorithms:
