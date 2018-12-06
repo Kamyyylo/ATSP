@@ -2,7 +2,6 @@ package com.company;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -22,7 +21,7 @@ public class TabuSearch {
     @FXML
     private TextArea tabuSearchTextArea;
     @FXML
-    private TextField stopReqTextField;
+    private TextField algorithmWorkTimeTextField;
     @FXML
     private RadioButton insertRadioButton;
 
@@ -31,6 +30,8 @@ public class TabuSearch {
 
     @FXML
     private RadioButton invertRadioButton;
+    @FXML
+    private TextField instancesTextField;
     @FXML
     private Button closeButton;
     @FXML
@@ -47,13 +48,13 @@ public class TabuSearch {
         public File file;
         public int [][] tabuList;                                           //tabu list
         public ArrayList<Integer> Path = new ArrayList<>();                 //Path with cities to shuffle and swaping
-        public ArrayList<Integer> bestBestSol = new ArrayList<>();          //The best Path og cities
-        public int itr;                                                     //STOP requirement
+        public ArrayList<Integer> theBestSolutionPath = new ArrayList<>();   //The best Path og cities
         public int time;                                                    //time to tabuList
         public int critical=0;                                              //Counter to critical moment in tabuSearch
         int maxCritical;                                                    //Maximum of critical repeats
-        int bestBestCost=999999;
-        public int t;
+        int theBestSolutionCost=999999;
+        long timeCounterStart, timeOfFoundTheBestPath,FinalTime;
+        long timeCounterStop=0;
         public void loadFile ()throws FileNotFoundException {
 
             String workingDir = System.getProperty("user.dir");
@@ -133,7 +134,7 @@ public class TabuSearch {
         public void startAlgorithm() {
             System.out.println("Rozmiar macierzy: " + m_size);
             tabuList = new int[m_size][m_size];
-
+        for(int w=0;w<Integer.parseInt(instancesTextField.getText());w++) {
             for (int i = 0; i < m_size; i++) {                                  //create path list with size of number of cities
                 Path.add(i);
 
@@ -146,17 +147,23 @@ public class TabuSearch {
 
             maxCritical = m_size * 2;//dywersyfikacji
             System.out.println("\nMaxCritical: " + maxCritical);
-            itr = Integer.parseInt(stopReqTextField.getText());
+
             Solution();
+            printPath();
+
+
+        }
         }
     public void Solution(){
         java.util.Collections.shuffle(Path);                                //Permutation of cities list
         System.out.print("shuffled list: "+ Path+"\n");
-        ArrayList<Integer>newSol;
-        bestBestCost =pathCostList(Path);                                   //assigned first list as the best solution
-        ArrayList<Integer> BestSol= new ArrayList<>();                      //List of best solution
-        for(int i=0;i<itr;i++)                                              //Main loop
+        ArrayList<Integer>temporaryNewSolution;
+        theBestSolutionCost =pathCostList(Path);                                   //assigned first list as the best solution
+        ArrayList<Integer> BestSolution= new ArrayList<>();                     //List of best solution
+        timeCounterStart=System.currentTimeMillis();
+       while(timeCounterStop-timeCounterStart<=(Integer.parseInt(algorithmWorkTimeTextField.getText())*60000))                                              //Main loop
         {
+
             int city_1=0;                                                   //cities that will be put in tabuList
             int city_2=0;
             int bestCost=999999;
@@ -164,68 +171,61 @@ public class TabuSearch {
                 for(int k=2;k<m_size;k++){                                  //Second city in queue
                     //System.out.println("\n#####################################################iteracja petli: "+ k);// next city to swap
                     if(j!=k){
-                        newSol= new ArrayList<>();                          //Make new list with solution
+                        temporaryNewSolution= new ArrayList<>();                          //Make new list with solution
                         for(int m=0;m<Path.size();m++){
-                            newSol.add(Path.get(m));
+                            temporaryNewSolution.add(Path.get(m));
 
                         }
-                      //  System.out.print("wpisane do newSol: "+ newSol+"\n");
                         if(swapRadioButton.isSelected())
-                        swap(newSol,j,k);                                       //swaping neighbors
+                        swap(temporaryNewSolution,j,k);                                       //swaping neighbors
                         if(insertRadioButton.isSelected())
-                        insert(newSol,j,k);                                     //inserting neighbors
+                        insert(temporaryNewSolution,j,k);                                     //inserting neighbors
                         if(invertRadioButton.isSelected())
-                        invert(newSol,j,k);                                     //inverting neighbors
-                        //System.out.print("new Sol po swapie: "+ newSol+"\n");
-                        int newCost=pathCostList(newSol);                     //Counting cost of trip for generated list of cities
+                        invert(temporaryNewSolution,j,k);                                     //inverting neighbors
+                        int newCost=pathCostList(temporaryNewSolution);                     //Counting cost of trip for generated list of cities
 
                         if(newCost<bestCost && tabuList[j][k]==0){            //if counted value is better and tabuList allow --> go to the loop
-                            BestSol= new ArrayList<>();                       //new best solution
+                            BestSolution= new ArrayList<>();                       //new best solution
                             for(int m=0;m<Path.size();m++){
-                                BestSol.add(newSol.get(m));
+                                BestSolution.add(temporaryNewSolution.get(m));
                             }
-                            // System.out.print("Best solution: "+ BestSol);
                             city_1=j;                                         //This cities will be assigned to tabuList
                             city_2=k;
-                            // System.out.println("#####################################################K: "+ k);
                             bestCost=newCost;
                         }
                     }
                 }
             }
-
             if(city_1 !=0){
                 decrementation();                                              //decrementation tabuList for future possible usage pare of cities
                 addTabu(city_1,city_2);                                        //Adding tabu to cities
             }
-            if(bestBestCost>bestCost){                                         //saving the best of the best result
-                bestBestCost=bestCost;
-                t=i;
-                bestBestSol= new ArrayList<>();
-                for(int m=0;m<BestSol.size();m++){
-                    bestBestSol.add(BestSol.get(m));                           //List with the best path
-
+            if(theBestSolutionCost>bestCost){                                         //saving the best of the best result
+                timeOfFoundTheBestPath=System.currentTimeMillis();
+                theBestSolutionCost=bestCost;
+                theBestSolutionPath= new ArrayList<>();
+                for(int m=0;m<BestSolution.size();m++){
+                    theBestSolutionPath.add(BestSolution.get(m));                           //List with the best path
                 }
+               FinalTime=timeOfFoundTheBestPath-timeCounterStart;
             }
-           // System.out.print("Bestbestsol: "+bestBestSol+"#");
-
             if(swapRadioButton.isSelected())
                 swap(Path,city_1,city_2);                                         //swap for city 1 and city 2 which are cities with better cost
             if(insertRadioButton.isSelected())
                 insert(Path,city_1,city_2);                                     //insert for city 1 and city 2 which are cities with better cost
             if(invertRadioButton.isSelected())
                 invert(Path,city_1,city_2);                                     //invert for city 1 and city 2 which are cities with better cost
-            // System.out.println("city_1: "+city_1+" city_2: "+city_2);
-           // System.out.print("new Sol po swapie2:"+ Path+"\n");
-            criticalEvent(bestCost,bestBestSol);                               //Checking critival events, diversification
-            System.out.print("i: "+i+"\t best cost: ");
+            criticalEvent(bestCost,theBestSolutionPath);                               //Checking critival events, diversification
+            System.out.print("\t best cost: ");
             printBestCost();
+            timeCounterStop=System.currentTimeMillis();
+            System.out.println("Algorithm time stand: "+ (timeCounterStop-timeCounterStart)+"ms");
 
         }
     }
 
     public void swap (ArrayList<Integer>Path, int i ,int j){
-        int tmp = Path.get(i);                                                  //Swaping neighbour in Path list
+        int tmp = Path.get(i);
         Path.set(i,Path.get(j));
         Path.set(j,tmp);
 
@@ -242,7 +242,6 @@ public class TabuSearch {
     public void invert(ArrayList<Integer>Path, int i ,int j){
             ArrayList<Integer> temporary_1 = new ArrayList<>();
             ArrayList<Integer> temporaryReverse=new ArrayList<>();
-        System.out.print("Droga normalna " +Path+"\n");
             int pos1 = Path.indexOf(Path.get(i));
             int pos2=Path.indexOf(Path.get(j));
             if(i<j){
@@ -279,11 +278,10 @@ public class TabuSearch {
         {
         Path.add(temporary_1.get(h));
         }
-        System.out.print("Droga  " +Path+"\n");
     }
 
     public void criticalEvent(int bestCost,ArrayList<Integer> bestBestSol){
-        if(bestBestCost<bestCost){                                              //if result is not better critical++
+        if(theBestSolutionCost<bestCost){                                              //if result is not better critical++
             critical++;
             System.out.println("Critical: "+critical);
         }
@@ -306,7 +304,7 @@ public class TabuSearch {
                     for(int n=0;n<Path.size();n++){
                         Path.add(tmp.get(n));
                     }
-                    if(bestBestCost>pathCostList(Path)){                       //The same situtation with the best cost. if found better path --> replace
+                    if(theBestSolutionCost>pathCostList(Path)){                       //The same situtation with the best cost. if found better path --> replace
                         bestBestSol= new ArrayList<>();
                         for(int n=0;n<Path.size();n++){
                             bestBestSol.add(Path.get(n));
@@ -343,18 +341,20 @@ public class TabuSearch {
     }
 
     public void printBestCost(){
-        System.out.println(bestBestCost);                                       //printing path with the best cost
+        System.out.println(theBestSolutionCost);                                       //printing path with the best cost
     }
 
     public void printPath(){                                                    //printing final path with the best result
-       tabuSearchTextArea.appendText("The best cost --> "+ pathCostList(bestBestSol)+"\t\t\nThe best path found --> ");
+       tabuSearchTextArea.appendText("\nThe best cost --> "+ pathCostList(theBestSolutionPath)+"\t\t\nThe best path found --> ");
 
-        for(int i=0;i<bestBestSol.size();i++){
-            tabuSearchTextArea.appendText(bestBestSol.get(i)+" ");
+        for(int i=0;i<theBestSolutionPath.size();i++){
+            tabuSearchTextArea.appendText(theBestSolutionPath.get(i)+" ");
         }
-        tabuSearchTextArea.appendText(""+bestBestSol.get(0));
+        tabuSearchTextArea.appendText(""+theBestSolutionPath.get(0));
         tabuSearchTextArea.appendText("\n");
-        bestBestSol.clear();
+        tabuSearchTextArea.appendText("When the best path was found: "+ FinalTime);
+
+        theBestSolutionPath.clear();
         Path.clear();
 
     }
