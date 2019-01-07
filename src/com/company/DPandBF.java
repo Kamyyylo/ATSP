@@ -5,7 +5,6 @@ import java.util.Random;
 import java.util.Scanner;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
@@ -380,4 +379,10 @@ public class DPandBF {
         TSPPane.getChildren().setAll(tabuSearchPane);
 
     }
+    public void initalizeGeneticAlgorithmPane() throws IOException
+    {
+        Pane geneticAlgorithmPane = FXMLLoader.load(getClass().getResource("GeneticAlgorithmPane.fxml"));
+        TSPPane.getChildren().setAll(geneticAlgorithmPane);
+    }
+
 }

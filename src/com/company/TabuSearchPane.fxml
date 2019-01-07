@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="tabuSearchPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.TabuSearch">
+<Pane fx:id="tabuSearchPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.TabuSearchController">
    <children>
       <Label layoutX="413.0" layoutY="-10.0" text="Tabu Search" textFill="#2367dd">
          <font>
@@ -62,14 +62,6 @@
          </effect>
       </Label>
       <Button layoutX="15.0" layoutY="360.0" mnemonicParsing="false" onAction="#startAlgorithm" prefHeight="50.0" prefWidth="535.0" text="Start Tabu Search Algorithm">
-         <font>
-            <Font name="Times New Roman" size="18.0" />
-         </font>
-         <effect>
-            <InnerShadow />
-         </effect>
-      </Button>
-      <Button layoutX="15.0" layoutY="421.0" mnemonicParsing="false" onAction="#printPath" prefHeight="50.0" prefWidth="535.0" text="Print Path">
          <font>
             <Font name="Times New Roman" size="18.0" />
          </font>

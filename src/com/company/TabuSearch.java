@@ -1,133 +1,33 @@
 package com.company;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
-import javafx.scene.control.TextArea;
-import javafx.stage.Stage;
 
-import javax.swing.*;
 public class TabuSearch {
-    @FXML
-    private Pane tabuSearchPane;
-    @FXML
-    private TextArea tabuSearchTextArea;
-    @FXML
-    private TextField algorithmWorkTimeTextField;
-    @FXML
-    private RadioButton insertRadioButton;
 
-    @FXML
-    private RadioButton swapRadioButton;
-
-    @FXML
-    private RadioButton invertRadioButton;
-    @FXML
-    private TextField instancesTextField;
-    @FXML
-    private Button closeButton;
-    @FXML
-    private void closeButtonAction(){
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.close();
-    }
-        public ArrayList<String> matrixToShow =new ArrayList<>();           //Showing matrix
-        public int m_size = -1;
-        public int[][] cities;
-        public int cost=0;
-        public File file;
         public int [][] tabuList;                                           //tabu list
-        public ArrayList<Integer> Path = new ArrayList<>();                 //Path with cities to shuffle and swaping
-        public ArrayList<Integer> theBestSolutionPath = new ArrayList<>();   //The best Path og cities
+        public ArrayList<Integer> Path = new ArrayList<>();                 //cityPath with cities to shuffle and swaping
+        public ArrayList<Integer> theBestSolutionPath = new ArrayList<>();   //The best cityPath og cities
+        public ArrayList<String> printPathList  = new ArrayList<>();
         public int time;                                                    //time to tabuList
+        int m_size;
         public int critical=0;                                              //Counter to critical moment in tabuSearch
         int maxCritical;                                                    //Maximum of critical repeats
         int theBestSolutionCost=999999;
         long timeCounterStart, timeOfFoundTheBestPath,FinalTime;
         long timeCounterStop=0;
-        public void loadFile ()throws FileNotFoundException {
-
-            String workingDir = System.getProperty("user.dir");
-            workingDir += "\\" + "\\Files";                                 //Place where files to load exist
-            JFileChooser jFileChooser = new JFileChooser(workingDir);
-            if( jFileChooser.showOpenDialog(null)==JFileChooser.APPROVE_OPTION)
-            {
-            file = new File(jFileChooser.getSelectedFile().toString());
-            Scanner in = new Scanner(file);
-            matrixToShow.clear();
-            for(int i=0;i<8;i++) {                                          //Loop to decode .atsp file and it's content
-                if(i==1){
-                    matrixToShow.add(in.next());
-                    if(in.next().equals("ATSP")){
-                        matrixToShow.add("ATSP\n");
-                    }
-                    else {                                                  //if file is not .ATSP
-                        JOptionPane.showMessageDialog(null,"Choose .atsp file!");
-                        jFileChooser = new JFileChooser(workingDir);
-                        if( jFileChooser.showOpenDialog(null)==JFileChooser.APPROVE_OPTION)
-                            file = new File(jFileChooser.getSelectedFile().toString());
-                           in = new Scanner(file);
-                           matrixToShow.clear();
-                           i =0;
-                    }
-                    matrixToShow.add(in.nextLine());
-                }
-                else if(i==3){
-                    matrixToShow.add(in.next());
-                    m_size=in.nextInt();
-                    matrixToShow.add(String.valueOf(m_size));
-                }
-                else {
-                    matrixToShow.add(in.nextLine()+"\n");
-                }
-            }
-            cities= new int [m_size][m_size];                                  //matrix with cities
-                for (int i = 0; i < m_size; i++) {
-                    for (int j = 0; j < m_size; j++) {
-                        cities[i][j] = in.nextInt();
-                        if (i == j) {
-                            cities[i][j] = -1;
-                        }
-                    }
-                }
-
-        }
-        addCitiesToList();
-        }
-        public void addCitiesToList(){                                          //adding cities to list that will be show in textarea
-            for(int i=0;i<m_size;i++){
-                for (int j=0;j<m_size;j++){
-                    matrixToShow.add(cities[i][j]+"\t");
-                }
-                matrixToShow.add("\n");
-            }
-        }
-    public void  printCities(){                                                 //Printing matrix
-            tabuSearchTextArea.clear();
-        tabuSearchTextArea.appendText(matrixToShow + "");
+        LoadFile lf;
+    TabuSearch(LoadFile lf){
+        this.lf=lf;
+        m_size=lf.m_size;
     }
-        public int pathCostList(ArrayList<Integer> Path){
-            cost =0;
-            for(int i=0;i<Path.size()-1;i++){
-                cost=cost+cities[Path.get(i)][Path.get(i+1)];
-            }
+        public void startAlgorithm( int workTime, int instances, int neighborhood) {
 
-            cost=cost+cities[Path.get(Path.size()-1)][Path.get(0)];
-            return cost;
-        }
-
-        public void startAlgorithm() {
+            int algorithmWorkTime=workTime*60000;
+            int neighbor= neighborhood;
             System.out.println("Rozmiar macierzy: " + m_size);
             tabuList = new int[m_size][m_size];
-        for(int w=0;w<Integer.parseInt(instancesTextField.getText());w++) {
+        for(int w=0;w<instances;w++) {
             for (int i = 0; i < m_size; i++) {                                  //create path list with size of number of cities
                 Path.add(i);
 
@@ -141,20 +41,18 @@ public class TabuSearch {
             maxCritical = m_size * 2;
             System.out.println("\nMaxCritical: " + maxCritical);
 
-            Solution();
-            printPath();
-
-
+            Solution(algorithmWorkTime,neighbor, m_size);
+            printPathList();
         }
         }
-    public void Solution(){
+    public void Solution(int algorithmWorkTime, int neighbor, int m_size){
         java.util.Collections.shuffle(Path);                                //Permutation of cities list
         System.out.print("shuffled list: "+ Path+"\n");
         ArrayList<Integer>temporaryNewSolution;
-        theBestSolutionCost =pathCostList(Path);                                   //assigned first list as the best solution
+        theBestSolutionCost =lf.pathCostList(Path);                                   //assigned first list as the best solution
         ArrayList<Integer> BestSolution= new ArrayList<>();                     //List of best solution
         timeCounterStart=System.currentTimeMillis();
-       while(timeCounterStop-timeCounterStart<=(Integer.parseInt(algorithmWorkTimeTextField.getText())*60000))                                              //Main loop
+       while(timeCounterStop-timeCounterStart<=algorithmWorkTime)                                              //Main loop
         {
 
             int city_1=0;                                                   //cities that will be put in tabuList
@@ -168,13 +66,13 @@ public class TabuSearch {
                             temporaryNewSolution.add(Path.get(m));
 
                         }
-                        if(swapRadioButton.isSelected())
+                        if(neighbor==1)
                         swap(temporaryNewSolution,j,k);                                       //swaping neighbors
-                        if(insertRadioButton.isSelected())
+                        if(neighbor==2)
                         insert(temporaryNewSolution,j,k);                                     //inserting neighbors
-                        if(invertRadioButton.isSelected())
+                        if(neighbor==3)
                         invert(temporaryNewSolution,j,k);                                     //inverting neighbors
-                        int newCost=pathCostList(temporaryNewSolution);                     //Counting cost of trip for generated list of cities
+                        int newCost=lf.pathCostList(temporaryNewSolution);                     //Counting cost of trip for generated list of cities
 
                         if(newCost<bestCost && tabuList[j][k]==0){            //if counted value is better and tabuList allow --> go to the loop
                             BestSolution= new ArrayList<>();                       //new best solution
@@ -189,7 +87,7 @@ public class TabuSearch {
                 }
             }
             if(city_1 !=0){
-                decrementation();                                              //decrementation tabuList for future possible usage pare of cities
+                decrementation(m_size);                                              //decrementation tabuList for future possible usage pare of cities
                 addTabu(city_1,city_2);                                        //Adding tabu to cities
             }
             if(theBestSolutionCost>bestCost){                                         //saving the best of the best result
@@ -201,13 +99,13 @@ public class TabuSearch {
                 }
                FinalTime=timeOfFoundTheBestPath-timeCounterStart;
             }
-            if(swapRadioButton.isSelected())
+            if(neighbor==1)
                 swap(Path,city_1,city_2);                                         //swap for city 1 and city 2 which are cities with better cost
-            if(insertRadioButton.isSelected())
+            if(neighbor==2)
                 insert(Path,city_1,city_2);                                     //insert for city 1 and city 2 which are cities with better cost
-            if(invertRadioButton.isSelected())
+            if(neighbor==3)
                 invert(Path,city_1,city_2);                                     //invert for city 1 and city 2 which are cities with better cost
-            criticalEvent(bestCost,theBestSolutionPath);                               //Checking critival events, diversification
+            criticalEvent(bestCost,theBestSolutionPath,m_size);                               //Checking critival events, diversification
             System.out.print("\t best cost: ");
             printBestCost();
             timeCounterStop=System.currentTimeMillis();
@@ -272,7 +170,7 @@ public class TabuSearch {
         }
     }
 
-    public void criticalEvent(int bestCost,ArrayList<Integer> bestBestSol){
+    public void criticalEvent(int bestCost,ArrayList<Integer> bestBestSol, int m_size){
         if(theBestSolutionCost<bestCost){                                              //if result is not better critical++
             critical++;
             System.out.println("Critical: "+critical);
@@ -289,14 +187,14 @@ public class TabuSearch {
             }
             for(int m=0;m<m_size;m++){
                 java.util.Collections.shuffle(tmp);                            //shuffle temporary list
-                System.out.println("Path cost list(path) "+pathCostList(Path));
-                System.out.println("Path cost list(tmp) "+pathCostList(tmp));
-                if(pathCostList(Path)>pathCostList(tmp)){                      //if temporary list found better result
+                System.out.println("cityPath cost list(path) "+lf.pathCostList(Path));
+                System.out.println("cityPath cost list(tmp) "+lf.pathCostList(tmp));
+                if(lf.pathCostList(Path)>lf.pathCostList(tmp)){                      //if temporary list found better result
                     Path= new ArrayList<>();                                   //create new path list with temporary path steps
                     for(int n=0;n<Path.size();n++){
                         Path.add(tmp.get(n));
                     }
-                    if(theBestSolutionCost>pathCostList(Path)){                       //The same situtation with the best cost. if found better path --> replace
+                    if(theBestSolutionCost>lf.pathCostList(Path)){                       //The same situtation with the best cost. if found better path --> replace
                         bestBestSol= new ArrayList<>();
                         for(int n=0;n<Path.size();n++){
                             bestBestSol.add(Path.get(n));
@@ -319,7 +217,7 @@ public class TabuSearch {
         tabuList[city2][city1]+= time;
     }
 
-    public void decrementation(){                                               //decrementation of tabu after every loop step
+    public void decrementation(int m_size){                                               //decrementation of tabu after every loop step
         for(int i=0;i<m_size;i++){
             for(int j=0;j<m_size;j++){
                 if(tabuList[i][j]>0){
@@ -334,28 +232,25 @@ public class TabuSearch {
         System.out.println(theBestSolutionCost);                                       //printing path with the best cost
     }
 
-    public void printPath(){                                                    //printing final path with the best result
-       tabuSearchTextArea.appendText("\nThe best cost --> "+ pathCostList(theBestSolutionPath)+"\t\t\nThe best path found --> ");
+    public void makePathList(){                                                    //printing final path with the best result
+      printPathList.add("\nThe best cost --> "+ lf.pathCostList(theBestSolutionPath)+"\t\t\nThe best path found --> ");
 
         for(int i=0;i<theBestSolutionPath.size();i++){
-            tabuSearchTextArea.appendText(theBestSolutionPath.get(i)+" ");
+            printPathList.add(theBestSolutionPath.get(i)+" ");
         }
-        tabuSearchTextArea.appendText(""+theBestSolutionPath.get(0));
-        tabuSearchTextArea.appendText("\n");
-        tabuSearchTextArea.appendText("When the best path was found: "+ FinalTime);
+        printPathList.add(""+theBestSolutionPath.get(0));
+        printPathList.add("\n");
+        printPathList.add("When the best path was found: "+ FinalTime);
 
         theBestSolutionPath.clear();
         Path.clear();
 
     }
-
-    public void previousPane()throws IOException {
-        Pane dpandbfPane = FXMLLoader.load(getClass().getResource("DPandBFPane.fxml"));
-        tabuSearchPane.getChildren().setAll(dpandbfPane);
-
-
-
+    public ArrayList printPathList()
+    {
+        return printPathList;
     }
+
 
 
 }

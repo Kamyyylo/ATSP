@@ -7,6 +7,9 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.io.FileNotFoundException;
+
 public class Main extends Application {
     private double xOffset = 0;
     private double yOffset = 0;
@@ -34,9 +37,26 @@ public class Main extends Application {
         stage.setScene(scene);
 
         stage.show();
+
     }
-    public static void main(String[] args) {
+
+
+    public static void main(String[] args) throws FileNotFoundException {
         launch(args);
+//        int populationSize =1000;
+//        int itr =2000;
+//        int childrenPairsSize =500;//populationSize/2;
+//        float mutationProbability =0.08f;
+//        float crossProbability = 0.8f;
+//        LoadFile lf = new LoadFile();
+//        lf.loadFile();
+//        GeneticAlgorithm g = new GeneticAlgorithm(lf);
+//        //g.createStartingPopulation(5);
+//        //g.printPopulation();
+//        int r = g.solution(populationSize, itr, childrenPairsSize, mutationProbability, crossProbability);
+//        System.out.println(9999999-r);
     }
+
+
 
 }
