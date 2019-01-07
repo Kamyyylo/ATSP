@@ -16,8 +16,8 @@ To solve ATSP i used **Dynamic Programming**, **Brute-Force method**, **TabuSeac
 
 Program has userfriendly interface to test and learn this two algorithms:
 
-![alt text](https://i.ibb.co/RcvgCcb/Screenshot-2019-01-07-23-55-35.jpg)
+![alt text](https://i.ibb.co/1Tv09TQ/Screenshot-2019-01-07-23-55-35.jpg)
 
-![alt text](https://i.ibb.co/60Pq038/Screenshot-2019-01-07-23-55-43.jpg)
+![alt text](https://i.ibb.co/9HTdHFh/Screenshot-2019-01-07-23-55-43.jpg)
 
-![alt text](https://i.ibb.co/z5PF9zD/Screenshot-2019-01-07-23-55-56.jpg)
+![alt text](https://i.ibb.co/SxVcYzG/Screenshot-2019-01-07-23-55-56.jpg)
